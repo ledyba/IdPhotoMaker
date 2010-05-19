@@ -18,11 +18,11 @@ import java.util.logging.Logger;
  */
 public class DocumentSize {
 
-    public static final DocumentSize LETTER = new DocumentSize(612, 792);
+    public static final DocumentSize LETTER = new DocumentSize(612, 792,false,"document.size.letter");
     public static final DocumentSize A0 = new DocumentSize(2384, 3370);
     public static final DocumentSize A1 = new DocumentSize(1684, 2384);
     public static final DocumentSize A2 = new DocumentSize(1191, 1684);
-    public static final DocumentSize A3 = new DocumentSize(842, 1191);
+    public static final DocumentSize A3 = new DocumentSize(841, 1191);
     public static final DocumentSize A4 = new DocumentSize(595, 842,true);
     public static final DocumentSize A5 = new DocumentSize(420, 595);
     public static final DocumentSize A6 = new DocumentSize(297, 420);
@@ -41,6 +41,8 @@ public class DocumentSize {
     public static final DocumentSize B8 = new DocumentSize(175, 249);
     public static final DocumentSize B9 = new DocumentSize(124, 175);
     public static final DocumentSize B10 = new DocumentSize(87, 124);
+    public static final DocumentSize L = new DocumentSize(252,360,false,"document.size.l");
+    public static final DocumentSize L2 = new DocumentSize(360,510,false,"document.size.2l");
     public static final Map<String,DocumentSize> SizeList;
     static {
         Map<String,DocumentSize> hash = new TreeMap<String,DocumentSize>();
