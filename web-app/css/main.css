@@ -213,7 +213,7 @@ select.document_size_list {
 }
 
 input.photo_size{
-    
+    width: 80px;
 }
 div.guide_wrapepr{
     padding: 0px;

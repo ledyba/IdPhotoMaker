@@ -55,19 +55,21 @@ class PdfController {
             }
             try{
                 width = Double.parseDouble(pair.width);
-                if(width < 0){
+                if(width <= 0){
                     error_lists.add(message(code: "pdf.create.minus.width", args:[pair.width]));
                 }
             }catch(NumberFormatException e){
                 error_lists.add(message(code: "pdf.create.invalid.width",args:[pair.width]));
+                width = 0;
             }
             try{
                 height = Double.parseDouble(pair.height);
-                if(height < 0){
+                if(height <= 0){
                     error_lists.add(message(code: "pdf.create.minus.height",args:[pair.height]));
                 }
             }catch(NumberFormatException e){
                 error_lists.add(message(code: "pdf.create.invalid.height",args:[pair.count]));
+                height = 0;
             }
             try{
                 count = Integer.parseInt(pair.count);
@@ -76,6 +78,7 @@ class PdfController {
                 }
             }catch(NumberFormatException e){
                 error_lists.add(message(code: "pdf.create.invalid.count",args:[pair.count]));
+                count = 0;
             }
             PhotoRequest req;
             try{
