@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
-    <% if(layoutTitle == null || layoutTitle.isEmpty()){ %><title><g:message code="site.title" /></title><% }else{ %><title><g:message code="site.title" /> - <g:layoutTitle default="Grails" /></title><% } %>
+    <% if(layoutTitle){ %><title><g:message code="site.title" /> - <g:layoutTitle default="Grails" /></title><% }else{ %><title><g:message code="site.title" /></title><% } %>
     <meta http-equiv="Content-Script-Type" content="text/javascript" />
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
@@ -18,10 +18,10 @@
     </div>
 	<div id="main">
 		<div id="header">
-            <% if(layoutTitle == null || layoutTitle.isEmpty()){ %>
-			<a class="title" href="${createLink(uri: '/')}"><g:message code="site.title" /></a>
-            <% }else{ %>
+            <% if(layoutTitle){ %>
 			<a class="title" href="${createLink(uri: '/')}"><g:message code="site.title" /></a> - ${layoutTitle}
+            <% }else{ %>
+			<a class="title" href="${createLink(uri: '/')}"><g:message code="site.title" /></a>
             <% } %>
 		</div>
 		<div id="main-box">
