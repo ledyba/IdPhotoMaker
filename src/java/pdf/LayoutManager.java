@@ -23,8 +23,8 @@ public class LayoutManager {
     private DocumentSize DocSize;
     private PhotoRequest[] Requests;
     private ByteArrayOutputStream Baos;
-    private final double MARGIN = 12.0f;
-    private final double FONT_SIZE = 12.0f;
+    private static final double MARGIN = 12.0f;
+    private static final double FONT_SIZE = 12.0f;
 
     public LayoutManager(DocumentSize DocSize, PhotoRequest[] Requests) {
         this.DocSize = DocSize;
@@ -65,7 +65,7 @@ public class LayoutManager {
             image.setImageMask(req.getMask());
             final double scale_x = req.getSize().getW()/(req.getX2()-req.getX1());
             final double scale_y = req.getSize().getH()/(req.getY2()-req.getY1());
-            final int photo_in_one_line = (int)(left_width / req.getSize().getW());
+            final int photo_in_one_line = Math.max((int)(left_width / req.getSize().getW()),1);
             final double line_margin = (left_width-(req.getSize().getW()*photo_in_one_line)) / (photo_in_one_line-1);
             for(int i=0;(photo_in_one_line * i) < req.getCount();i++){
                 if(draw_y+req.getSize().getH()+MARGIN > doc.getPageSize().getHeight()){//改ページ
@@ -104,5 +104,8 @@ public class LayoutManager {
     }
     public void outPdf(OutputStream os) throws IOException{
         Baos.writeTo(os);
+    }
+    public static double getMargin(){
+    	return MARGIN;
     }
 }

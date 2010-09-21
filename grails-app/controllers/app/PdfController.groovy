@@ -80,11 +80,20 @@ class PdfController {
                 error_lists.add(message(code: "pdf.create.invalid.count",args:[pair.count]));
                 count = 0;
             }
+            PhotoSize size;
             PhotoRequest req;
             try{
-                req = new PhotoRequest(info,new PhotoSize(width,height),count);
+            	size = new PhotoSize(width,height);
+                req = new PhotoRequest(info,size,count);
             }catch(InvalidPhotoPositionException ex){
                 error_lists.add(message(code: ex.getMessage()));
+            }
+            //サイズチェック
+            if(doc_size.getW()-(LayoutManager.getMargin()*2) < size.getW()){
+                error_lists.add(message(code: "pdf.create.too.big.width",args:[pair.height]));
+            }
+            if(doc_size.getH()-(LayoutManager.getMargin()*2) < size.getH()){
+                error_lists.add(message(code: "pdf.create.too.big.height",args:[pair.height]));
             }
             photo_req_list.add(req);
         }
