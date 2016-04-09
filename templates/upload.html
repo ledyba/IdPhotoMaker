@@ -1,0 +1,102 @@
+
+{{define "head"}}
+<script type="text/javascript" src="./static/js/prototype/prototype.js"></script>
+<script type="text/javascript" src="./static/js/prototype/scriptaculous.js"></script>
+<script type="text/javascript" src="./static/js/app.js"></script>
+{{end}}
+{{define "body"}}
+<p>あなたの顔写真ファイルのアップロードが完了しました。次は、印刷するための設定を行いましょう。</p>
+<form action="./create" method="post" target="_blank">
+<input id="form_photo_id" name="photo_id" type="hidden" value="{{.Secret}}" />
+<input id="form_photo_passid" name="photo_passid" type="hidden" value="{{.Secret}}" />
+<h2>顔の中央のラインを設定してください</h2>
+  <div id="photo_wrapper_appended_row">Photo</div>
+  <input id="photo_center" name="photo_center" type="hidden" />
+  <script type="text/javascript">
+    var row_manager = new PhotoManager('row','./thumb?id={{.Secret}}',{{.ThumbWidth}},{{.ThumbHeight}},'./static/images/face_center.jpg');
+    row_manager.appendTo('photo_row','photo_selector_row','photo_selector_wrapper_row','photo_wrapper_appended_row');
+    row_manager.setSlider('photo_center',0.5);
+  </script>
+<h2>あたまのてっぺんのラインを設定してください</h2>
+  <div id="photo_wrapper_appended_col_top">Photo</div>
+  <input id="photo_top" name="photo_top" type="hidden" />
+  <script type="text/javascript">
+    var col_manager_top = new PhotoManager('col','./thumb?id={{.Secret}}',{{.ThumbWidth}},{{.ThumbHeight}},'./static/images/face_top.jpg');
+    col_manager_top.appendTo('photo_col_top','photo_selector_col_top','photo_selector_wrapper_col_top','photo_wrapper_appended_col_top');
+    col_manager_top.setSlider('photo_top',0.2);
+  </script>
+<h2>アゴのラインを設定してください</h2>
+  <div id="photo_wrapper_appended_col_bottom">Photo</div>
+  <input id="photo_bottom" name="photo_bottom" type="hidden" />
+  <script type="text/javascript">
+    var col_manager_bottom = new PhotoManager('col','./thumb?id={{.Secret}}',{{.ThumbWidth}},{{.ThumbHeight}},'./static/images/face_bottom.jpg');
+    col_manager_bottom.appendTo('photo_col_bottom','photo_selector_col_bottom','photo_selector_wrapper_col_bottom','photo_wrapper_appended_col_bottom');
+    col_manager_bottom.setSlider('photo_bottom',0.8);
+  </script>
+<h2>印刷用紙のサイズはどれですか？</h2>
+  <select name="document_size">
+    <option value="LETTER">レターサイズ</option>
+    <option value="A0">A0</option>
+    <option value="A1">A1</option>
+    <option value="A2">A2</option>
+    <option value="A3">A3</option>
+    <option value="A4" selected>A4</option>
+    <option value="A5">A5</option>
+    <option value="A6">A6</option>
+    <option value="A7">A7</option>
+    <option value="A8">A8</option>
+    <option value="B0">B0</option>
+    <option value="B1">B1</option>
+    <option value="B2">B2</option>
+    <option value="B3">B3</option>
+    <option value="B4">B4</option>
+    <option value="B5">B5</option>
+    <option value="B6">B6</option>
+    <option value="B7">B7</option>
+    <option value="B8">B8</option>
+    <option value="B9">B9</option>
+    <option value="B10">B10</option>
+  </select>
+<h2>必要な証明写真のサイズと数はどれくらいですか？</h2>
+<p>　最低でも指定枚数は印刷されます。横のスペースがあまった場合、さらに印刷されます。</p>
+<p>　証明写真のサイズに関しては<a target="_blank" href="http://www.mpstudio.co.jp/idphoto/size/">こちらなど</a>を参考にしてください。</p>
+<div id="photo_size_list_wrapper">List</div>
+  <script type="text/javascript">
+  var photo_size_list_manager = new PhotoSizeListManager('photo_size','photo_size_list_wrapper',"横幅","縦幅","追加","枚");
+  </script>
+<h2>設定が完了しました</h2>
+<p>以下のボタンを押して作成してください。別のウインドウが開きます。気に入らない場合、何度でもやり直す事ができます。</p>
+  <p>
+    <input type="submit" value="作成">
+  </p>
+</form>
+<hr />
+<script type="text/javascript">
+google_ad_client = "pub-3121031347596821";
+google_ad_slot = "9025460473";
+google_ad_width = 468;
+google_ad_height = 60;
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+<hr />
+<h2>印刷ガイド</h2>
+<p>　PDFファイルが表示されたら、以下の手順に従って印刷してください。</p>
+<h3>紙をセットし、プリンタの電源を入れてください。</h3>
+<p>　印刷用紙をプリンタにセットし、プリンタのUSBケーブルをPCに接続し、プリンタの電源を入れてください。</p>
+<h3>印刷ボタンを押してください</h3>
+<img alt="step 1" src="./static/images/step1.jpg" />
+<p>　左上のほうにある印刷ボタンを押してください。</p>
+<h3>プリンタを設定</h3>
+<img alt="step 2" src="./static/images/step2.jpg" />
+<p>　上のほうのプリンタ設定をご使用のものにあわせて変更してください。特別に写真向けの設定が出来るプリンタもあるようです。フチなし印刷する必要はありません。詳しくはお使いのプリンタのマニュアルをご参照ください。</p>
+<h3>拡大率の設定</h3>
+<img alt="step 3-1" src="./static/images/step3-1.jpg" />
+<p>　次は真ん中のほうにある「ページ設定」に注目してください。</p>
+<img alt="step 3-2" src="./static/images/step3-2.jpg" />
+<p>　このように、「ページの拡大 / 縮小」は「なし」に設定してください。こう設定しないと、写真が意図したものより小さく印刷されてしまいます。</p>
+<h3>印刷</h3>
+<img alt="step 4" src="./static/images/step4.jpg" />
+<p>　以上で終了です。「OK」ボタンを押すと、印刷が開始されます。</p>
+{{end}}

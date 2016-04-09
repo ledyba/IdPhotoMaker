@@ -8,12 +8,13 @@ get:
 	go get -u "github.com/jteeuwen/go-bindata/..."
 	go get -u "github.com/elazarl/go-bindata-assetfs/..."
 	go get -u "github.com/jung-kurt/gofpdf/..."
+	go get -u "github.com/nfnt/resize/..."
 
 bind:
-	PATH=$(GOPATH)/bin:$(PATH) $(GOPATH)/bin/go-bindata-assetfs -pkg=main ./assets/...
+	PATH=$(GOPATH)/bin:$(PATH) $(GOPATH)/bin/go-bindata-assetfs -pkg=main ./static/...
 
 dbind:
-	PATH=$(GOPATH)/bin:$(PATH) $(GOPATH)/bin/go-bindata-assetfs -debug=true -pkg=main ./assets/...
+	PATH=$(GOPATH)/bin:$(PATH) $(GOPATH)/bin/go-bindata-assetfs -debug=true -pkg=main ./static/...
 
 run: all
 	$(GOPATH)/bin/IdPhotoMaker

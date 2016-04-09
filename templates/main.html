@@ -1,0 +1,68 @@
+{{define "base"}}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  {{if eq .Title ""}}
+  <title>証明写真作成工房</title>
+  {{else}}
+  <title>{{.Title}} - 証明写真作成工房</title>
+  {{end}}
+  <link rel="stylesheet" href="./static/css/main.css" />
+  {{template "head" .}}
+</head>
+<body>
+  <div id="spinner" class="spinner" style="display:none;">
+    <img src="./static/images/spinner.gif" alt="Spinner" />
+  </div>
+  <div id="main">
+    <div id="header">
+      {{if eq .Title ""}}
+      <a class="title" href="./">証明写真作成工房</a>
+      {{else}}
+      <a class="title" href="./">証明写真作成工房</a> - {{.Title}}
+      {{end}}
+    </div>
+    <div id="main-box">
+      <div id="content">
+{{template "body" .}}
+      </div>
+      <div id="sidebar">
+        <div class="module">
+          <div class="module-header">
+            広告
+          </div>
+          <div class="module-content">
+                      <script type="text/javascript">
+
+                      var _gaq = _gaq || [];
+                      _gaq.push(['_setAccount', 'UA-4766333-1']);
+                      _gaq.push(['_trackPageview']);
+
+                      (function() {
+                        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                      })();
+
+                      </script>
+                      <script type="text/javascript">
+            google_ad_client = "pub-3121031347596821";
+            google_ad_slot = "9192088374";
+            google_ad_width = 160;
+            google_ad_height = 600;
+            </script>
+            <script type="text/javascript"
+            src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">2010-2016 <a href="http://ledyba.org/">ψ（プサイ）の興味関心空間</a></div>
+  </div>
+</body>
+</html>
+{{end}}
+{{define "head"}}
+{{end}}
