@@ -32,8 +32,8 @@ func render(templateName string, dat interface{}, w http.ResponseWriter, r *http
 func main() {
 	flag.Parse() // Scan the arguments list
 	photo.InitCache()
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(assetFS())))
 	http.HandleFunc("/", mainHandler)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(assetFS())))
 	http.HandleFunc("/upload", uploadHandler)
 	http.HandleFunc("/thumb", thumbHandler)
 	http.HandleFunc("/pdf", pdfHandler)
