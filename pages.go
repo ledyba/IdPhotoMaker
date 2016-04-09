@@ -2,8 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"strconv"
+	"time"
 
+	"github.com/ledyba/IdPhotoMaker/pdf"
 	"github.com/ledyba/IdPhotoMaker/photo"
 )
 
@@ -83,8 +87,57 @@ func thumbHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(ph.Thumb)
 }
 
-func createHandler(w http.ResponseWriter, r *http.Request) {
+func pdfHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
+	var err error
 	form := r.Form
-	form.Get("")
+	ph := photo.Fetch(form.Get("id"))
+	if ph == nil {
+		http.Redirect(w, r, "./", http.StatusGone)
+		return
+	}
+	top, _ := strconv.ParseFloat(form.Get("top"), 32)
+	bottom, _ := strconv.ParseFloat(form.Get("bottom"), 32)
+	center, _ := strconv.ParseFloat(form.Get("center"), 32)
+	docSize := form.Get("document_size")
+
+	faceInfo := &pdf.FaceInfo{
+		Top:    float32(top),
+		Bottom: float32(bottom),
+		Center: float32(center),
+	}
+
+	cnt := 0
+	var reqs []*pdf.FaceRequest
+	for {
+		var w, h float64
+		var c int64
+		w, err = strconv.ParseFloat(form.Get(fmt.Sprintf("photo_size;%d;width", cnt)), 32)
+		if err != nil {
+			break
+		}
+		h, err = strconv.ParseFloat(form.Get(fmt.Sprintf("photo_size;%d;height", cnt)), 32)
+		if err != nil {
+			break
+		}
+		c, err = strconv.ParseInt(form.Get(fmt.Sprintf("photo_size;%d;count", cnt)), 10, 32)
+		if err != nil {
+			break
+		}
+		reqs = append(reqs, &pdf.FaceRequest{
+			WidthInMm:  float32(w) * 10.0,
+			HeightInMm: float32(h) * 10.0,
+			Count:      int(c),
+		})
+		cnt = cnt + 1
+	}
+
+	before := time.Now()
+	buff, err := pdf.CreateDoc(docSize, ph, faceInfo, reqs)
+	log.Printf("Creating PDF took %d ms, %d bytes.", time.Now().Sub(before).Nanoseconds()/1000/1000, len(buff))
+	if err != nil {
+		log.Print(err)
+		return
+	}
+	w.Write(buff)
 }

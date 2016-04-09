@@ -5,21 +5,22 @@ import (
 	"image"
 
 	"github.com/ledyba/IdPhotoMaker/photo"
+	"github.com/oliamb/cutter"
 )
 
 // Face represents cropped image
 type Face struct {
 	Image      image.Image
-	WidthInCm  float32
-	HeightInCm float32
+	WidthInMm  float32
+	HeightInMm float32
 	Width      int
 	Height     int
 }
 
 // FaceRequest ...
 type FaceRequest struct {
-	WidthInCm  float32
-	HeightInCm float32
+	WidthInMm  float32
+	HeightInMm float32
 	Count      int
 }
 
@@ -48,7 +49,7 @@ func CreateFace(img image.Image, ph *photo.Photo, info *FaceInfo, req *FaceReque
 	//規定はhttp://www.seikatubunka.metro.tokyo.jp/photo/index.htmlを参考に
 	photoHeight := faceHeight * 45 / 34
 	photoMarginTop := faceHeight * 4 / 34
-	photoWidth := photoHeight * req.WidthInCm / req.HeightInCm
+	photoWidth := photoHeight * req.WidthInMm / req.HeightInMm
 	x0 := center - (photoWidth / 2)
 	y0 := top - photoMarginTop
 	x1 := center + (photoWidth / 2)
@@ -56,10 +57,20 @@ func CreateFace(img image.Image, ph *photo.Photo, info *FaceInfo, req *FaceReque
 	if x0 < 0 || y0 < 0 || x1 > float32(ph.Width) || y1 > float32(ph.Height) {
 		return nil, ErrInvalidRange
 	}
+	croppedImg, err := cutter.Crop(img, cutter.Config{
+		Width:  int(x1 - x0),
+		Height: int(y1 - y0),
+		Anchor: image.Point{int(x0), int(y0)},
+		Mode:   cutter.TopLeft,
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	face := &Face{
-		Image:      image.NewRGBA(image.Rect(int(x0), int(y0), int(x1), int(y1))),
-		HeightInCm: req.HeightInCm,
-		WidthInCm:  req.WidthInCm,
+		Image:      croppedImg,
+		HeightInMm: req.HeightInMm,
+		WidthInMm:  req.WidthInMm,
 		Width:      int(photoWidth),
 		Height:     int(photoHeight),
 	}

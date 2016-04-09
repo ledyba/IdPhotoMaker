@@ -1,46 +1,67 @@
 package pdf
 
 import (
+	"bytes"
+	"fmt"
+	"image"
+	"image/jpeg"
+
+	"github.com/jung-kurt/gofpdf"
 	"github.com/ledyba/IdPhotoMaker/photo"
-	"github.com/signintech/gopdf"
 )
 
-// DocumentSize ...
-type DocumentSize struct {
-	Width  int
-	Height int
-}
-
-// DocumentSizes ...
-var DocumentSizes = map[string]DocumentSize{
-	"LETTER": DocumentSize{612, 792},
-	"A0":     DocumentSize{2384, 3370},
-	"A1":     DocumentSize{1684, 2384},
-	"A2":     DocumentSize{1191, 1684},
-	"A3":     DocumentSize{841, 1191},
-	"A4":     DocumentSize{595, 842},
-	"A5":     DocumentSize{420, 595},
-	"A6":     DocumentSize{297, 420},
-	"A7":     DocumentSize{210, 297},
-	"A8":     DocumentSize{148, 210},
-	"A9":     DocumentSize{105, 148},
-	"A10":    DocumentSize{73, 105},
-	"B0":     DocumentSize{2834, 4008},
-	"B1":     DocumentSize{2004, 2834},
-	"B2":     DocumentSize{1417, 2004},
-	"B3":     DocumentSize{1000, 1417},
-	"B4":     DocumentSize{708, 1000},
-	"B5":     DocumentSize{498, 708},
-	"B6":     DocumentSize{354, 498},
-	"B7":     DocumentSize{249, 354},
-	"B8":     DocumentSize{175, 249},
-	"B9":     DocumentSize{124, 175},
-	"B10":    DocumentSize{87, 124},
-}
-
 // CreateDoc ...
-func CreateDoc(docSize string, ph *photo.Photo, faceInfo *FaceInfo, reqs []*FaceRequest) {
-	pdf := gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{Unit: "pt", PageSize: gopdf.Rect{W: 595.28, H: 841.89}}) //595.28, 841.89 = A4
+func CreateDoc(docSizeName string, ph *photo.Photo, faceInfo *FaceInfo, reqs []*FaceRequest) ([]byte, error) {
+	var err error
+	img, _, err := image.Decode(bytes.NewReader(ph.Data))
+	if err != nil {
+		return nil, err
+	}
+	faces := make([]*Face, len(reqs))
+	pdf := gofpdf.New("P", "mm", docSizeName, "")
 	pdf.AddPage()
+	pdf.SetFont("Arial", "B", 16)
+	for i, req := range reqs {
+		name := fmt.Sprintf("%d", i)
+		var face *Face
+		face, err = CreateFace(img, ph, faceInfo, req)
+		if err != nil {
+			return nil, err
+		}
+		faces[i] = face
+		var buff bytes.Buffer
+		err = jpeg.Encode(&buff, face.Image, &jpeg.Options{Quality: 95})
+		if err != nil {
+			return nil, err
+		}
+		pdf.RegisterImageOptionsReader(name, gofpdf.ImageOptions{ImageType: "jpeg"}, bytes.NewReader(buff.Bytes()))
+		w, h, _ := pdf.PageSize(pdf.PageNo())
+		if (h-pdf.GetY())-float64(16+face.HeightInMm) < 10 {
+			pdf.AddPage()
+		}
+		const space = 3
+		margin := pdf.GetX()
+		line := int((w - 2*margin + space) / float64(face.WidthInMm+space))
+		left := (w - 2*margin + space) - float64(line)*float64(face.WidthInMm+space)
+		step := left/float64(line) + float64(face.WidthInMm) + space
+		pdf.Writef(12, "%.1fcmx%.1fcm\n", face.HeightInMm/10.0, face.WidthInMm/10.0)
+		total := 0
+		for total < req.Count {
+			if h-(pdf.GetY()+float64(face.HeightInMm)) < 10.0 {
+				pdf.AddPage()
+				pdf.SetY(10.0)
+			}
+			for i := 0; i < line; i++ {
+				pdf.ImageOptions(name, pdf.GetX()+step*float64(i), pdf.GetY(), float64(face.WidthInMm), float64(face.HeightInMm), false, gofpdf.ImageOptions{}, 0, "")
+				total = total + 1
+			}
+			pdf.SetY(pdf.GetY() + float64(face.HeightInMm) + space)
+		}
+	}
+	var buff bytes.Buffer
+	err = pdf.Output(&buff)
+	if err != nil {
+		return nil, err
+	}
+	return buff.Bytes(), nil
 }
