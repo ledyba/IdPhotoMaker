@@ -82,3 +82,9 @@ func thumbHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "image/jpeg")
 	w.Write(ph.Thumb)
 }
+
+func createHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	form := r.Form
+	form.Get("")
+}

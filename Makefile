@@ -7,7 +7,7 @@ all:
 get:
 	go get -u "github.com/jteeuwen/go-bindata/..."
 	go get -u "github.com/elazarl/go-bindata-assetfs/..."
-	go get -u "github.com/jung-kurt/gofpdf/..."
+	go get -u "github.com/signintech/gopdf/..."
 	go get -u "github.com/nfnt/resize/..."
 
 bind:

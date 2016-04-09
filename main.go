@@ -33,6 +33,7 @@ func main() {
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/upload", uploadHandler)
 	http.HandleFunc("/thumb", thumbHandler)
+	http.HandleFunc("/pdf", thumbHandler)
 
 	log.Printf("Start at http://localhost:%d/", *port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), nil))

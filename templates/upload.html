@@ -6,12 +6,11 @@
 {{end}}
 {{define "body"}}
 <p>あなたの顔写真ファイルのアップロードが完了しました。次は、印刷するための設定を行いましょう。</p>
-<form action="./create" method="post" target="_blank">
-<input id="form_photo_id" name="photo_id" type="hidden" value="{{.Secret}}" />
-<input id="form_photo_passid" name="photo_passid" type="hidden" value="{{.Secret}}" />
+<form action="./pdf" method="post" target="_blank">
+<input id="form_photo_id" name="id" type="hidden" value="{{.Secret}}" />
 <h2>顔の中央のラインを設定してください</h2>
   <div id="photo_wrapper_appended_row">Photo</div>
-  <input id="photo_center" name="photo_center" type="hidden" />
+  <input id="photo_center" name="center" type="hidden" />
   <script type="text/javascript">
     var row_manager = new PhotoManager('row','./thumb?id={{.Secret}}',{{.ThumbWidth}},{{.ThumbHeight}},'./static/images/face_center.jpg');
     row_manager.appendTo('photo_row','photo_selector_row','photo_selector_wrapper_row','photo_wrapper_appended_row');
@@ -19,7 +18,7 @@
   </script>
 <h2>あたまのてっぺんのラインを設定してください</h2>
   <div id="photo_wrapper_appended_col_top">Photo</div>
-  <input id="photo_top" name="photo_top" type="hidden" />
+  <input id="photo_top" name="top" type="hidden" />
   <script type="text/javascript">
     var col_manager_top = new PhotoManager('col','./thumb?id={{.Secret}}',{{.ThumbWidth}},{{.ThumbHeight}},'./static/images/face_top.jpg');
     col_manager_top.appendTo('photo_col_top','photo_selector_col_top','photo_selector_wrapper_col_top','photo_wrapper_appended_col_top');
@@ -27,7 +26,7 @@
   </script>
 <h2>アゴのラインを設定してください</h2>
   <div id="photo_wrapper_appended_col_bottom">Photo</div>
-  <input id="photo_bottom" name="photo_bottom" type="hidden" />
+  <input id="photo_bottom" name="bottom" type="hidden" />
   <script type="text/javascript">
     var col_manager_bottom = new PhotoManager('col','./thumb?id={{.Secret}}',{{.ThumbWidth}},{{.ThumbHeight}},'./static/images/face_bottom.jpg');
     col_manager_bottom.appendTo('photo_col_bottom','photo_selector_col_bottom','photo_selector_wrapper_col_bottom','photo_wrapper_appended_col_bottom');
