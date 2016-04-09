@@ -24,4 +24,4 @@ _testmain.go
 *.prof
 
 bindata_assetfs.go
-twitter-globe
+id-photo-maker

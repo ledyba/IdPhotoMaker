@@ -14,12 +14,15 @@ import (
 
 var port = flag.Int("port", 8080, "")
 
+func assumeFile(name string) string {
+	bytes, _ := Asset(name)
+	return string(bytes)
+}
+
 func render(templateName string, dat interface{}, w http.ResponseWriter, r *http.Request) {
-	funcMap := template.FuncMap{}
-	templates := template.Must(
-		template.New("").Funcs(funcMap).ParseFiles(
-			"templates/main.html",
-			fmt.Sprintf("templates/%s.html", templateName)))
+	templates := template.Must(template.New("").Parse(assumeFile("templates/main.html")))
+	templates, _ = templates.Parse(assumeFile(fmt.Sprintf("templates/%s.html", templateName)))
+
 	err := templates.ExecuteTemplate(w, "base", dat)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

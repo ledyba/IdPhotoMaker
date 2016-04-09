@@ -136,7 +136,13 @@ func pdfHandler(w http.ResponseWriter, r *http.Request) {
 	buff, err := pdf.CreateDoc(docSize, ph, faceInfo, reqs)
 	log.Printf("Creating PDF took %d ms, %d bytes.", time.Now().Sub(before).Nanoseconds()/1000/1000, len(buff))
 	if err != nil {
-		log.Print(err)
+		type Data struct {
+			Message string
+		}
+		dat := Data{
+			Message: fmt.Sprintf("作成エラー：%s", err.Error()),
+		}
+		render("create-error", dat, w, r)
 		return
 	}
 	w.Write(buff)
