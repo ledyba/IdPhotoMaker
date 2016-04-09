@@ -3,7 +3,7 @@
 
 http://ledyba.org/IdPhotoMaker/
 
-Grails製アプリ。顔写真から証明写真を作ってくれます。
+顔写真から証明写真を作ってくれます。もともとGrails製だったのをGolangに移植。なんだかなだもう6周年。
 
 License
 ===========
