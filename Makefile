@@ -1,4 +1,4 @@
-.PHONY: all get run clean bind dbind deploy
+.PHONY: all get run clean bind dbind
 
 all:
 	gofmt -w .
@@ -22,8 +22,3 @@ run: all
 
 clean:
 	go clean github.com/ledyba/IdPhotoMaker/...
-
-deploy: bind
-	GOOS=linux GOARCH=amd64 go build -o id-photo-maker github.com/ledyba/IdPhotoMaker
-	ssh ledyba.org mkdir -p /opt/run/IdPhotoMaker
-	scp id-photo-maker id-photo-maker.conf ledyba:/opt/run/IdPhotoMaker
