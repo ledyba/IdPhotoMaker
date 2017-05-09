@@ -2,7 +2,7 @@
 
 all:
 	gofmt -w .
-	go install github.com/ledyba/IdPhotoMaker/...
+	go build -o id-photo-maker github.com/ledyba/IdPhotoMaker
 
 get:
 	go get -u "github.com/jteeuwen/go-bindata/..."
